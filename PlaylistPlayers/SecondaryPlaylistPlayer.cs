@@ -23,12 +23,13 @@ namespace DnDTool
 
         public void GeneratedButtonClicked(string buttonName)
         {
-            PlaySeccond(RandomTrackFromPlaylist(playlists.Where(x => x.Key == buttonName).FirstOrDefault().Value));
+            PlaySecond(RandomTrackFromPlaylist(playlists.Where(x => x.Key == buttonName).FirstOrDefault().Value));
         }
 
-        public void PlaySeccond(string path = "")
+        public void PlaySecond(string path = "")
         {
             turnDownMain();
+            Logger.Log($"Actual track (second): {string.Join("/", path.Split(Path.DirectorySeparatorChar).Reverse().Take(4).Reverse())}");
             Play(path);
         }
     }

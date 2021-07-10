@@ -34,6 +34,7 @@ namespace DnDTool
         {
             if (path != "")
             {
+
                 mediaPlayer.Open(new Uri(path));
             }
             mediaPlayer.Play();
@@ -42,9 +43,13 @@ namespace DnDTool
         internal List<string> RandomPlaylistFromPlaylists(Dictionary<string, List<string>> _playlists)
         {
             // Just coppy of playlist and also random ordered
-            return _playlists.ElementAt(rand.Next(0, _playlists.Count)).Value
-                .OrderBy(x => rand.Next())
-                .ToList();
+
+            var pickedPlaylist = _playlists.ElementAt(rand.Next(0, _playlists.Count));
+            Logger.Log($"Actual playlist (random): {pickedPlaylist.Key}");
+            
+            return pickedPlaylist.Value
+                                    .OrderBy(x => rand.Next())
+                                    .ToList();
         }
 
         internal string RandomTrackFromPlaylist(List<string> playlist)

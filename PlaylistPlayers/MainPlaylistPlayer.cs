@@ -75,6 +75,7 @@ namespace DnDTool
             {
                 string actualTrack = actualPlaylist.First();
                 actualPlaylist.RemoveAt(0);
+                Logger.Log($"Actual track (main): {string.Join("/", actualTrack.Split(Path.DirectorySeparatorChar).Reverse().Take(4).Reverse())}");
                 Play(actualTrack);
             }
             else
@@ -86,7 +87,8 @@ namespace DnDTool
         public void PlayEncounter()
         {
             combatP = true;
-            actualPlaylist = null;  
+            actualPlaylist = null;
+            Logger.Log($"Actual track: Encounteeeer! Roll for initiative!!");
             Play(encounterPath);
         }
 
@@ -101,6 +103,7 @@ namespace DnDTool
         {
             combatP = true;
             actualPlaylist = playlists[playlist].OrderBy(x => rand.Next()).ToList();
+            Logger.Log($"Actual playlist (selected): {playlist}");
             PlayNext();
         }
 
@@ -115,21 +118,25 @@ namespace DnDTool
         {
             combatP = false;
             actualPlaylist = afterCombatPlaylists[playlist].OrderBy(x => rand.Next()).ToList();
+            Logger.Log($"Actual playlist (selected): {playlist}");
             PlayNext();
         }
 
         public void PlayContinue()
         {
+            Logger.Log("Continue...");
             Play();
         }
 
         public void Pause()
         {
+            Logger.Log("Paused...");
             mediaPlayer.Pause();
         }
 
         public void Stop()
         {
+            Logger.Log("Stopped...");
             mediaPlayer.Stop();
         }
 
