@@ -62,7 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Players\SecondaryPlaylistPlayer.cs" />
+    <Compile Include="PlaylistPlayers\SecondaryPlaylistPlayer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -71,7 +71,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Players\MainPlaylistPlayer.cs" />
+    <Compile Include="PlaylistPlayers\MainPlaylistPlayer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -82,7 +82,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Players\PlaylistPlayer.cs" />
+    <Compile Include="PlaylistPlayers\PlaylistPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
