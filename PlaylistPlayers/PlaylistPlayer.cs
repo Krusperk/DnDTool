@@ -45,7 +45,9 @@ namespace DnDTool
             // Just coppy of playlist and also random ordered
 
             var pickedPlaylist = _playlists.ElementAt(rand.Next(0, _playlists.Count));
-            Logger.Log($"Actual playlist (random): {pickedPlaylist.Key}");
+            StringBuilder sb = new StringBuilder();
+            pickedPlaylist.Value.ForEach(x => sb.Append(x + '\n'));
+            Logger.Log($"Actual playlist (random): {pickedPlaylist.Key} \n{sb}");
             
             return pickedPlaylist.Value
                                     .OrderBy(x => rand.Next())

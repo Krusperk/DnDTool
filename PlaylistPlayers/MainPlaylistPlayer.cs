@@ -103,7 +103,9 @@ namespace DnDTool
         {
             combatP = true;
             actualPlaylist = playlists[playlist].OrderBy(x => rand.Next()).ToList();
-            Logger.Log($"Actual playlist (selected): {playlist}");
+            StringBuilder sb = new StringBuilder();
+            actualPlaylist.ForEach(x => sb.Append(x + '\n'));
+            Logger.Log($"Actual playlist (selected): {playlist} \n{sb}");
             PlayNext();
         }
 
@@ -118,7 +120,9 @@ namespace DnDTool
         {
             combatP = false;
             actualPlaylist = afterCombatPlaylists[playlist].OrderBy(x => rand.Next()).ToList();
-            Logger.Log($"Actual playlist (selected): {playlist}");
+            StringBuilder sb = new StringBuilder();
+            actualPlaylist.ForEach(x => sb.Append(x + '\n'));
+            Logger.Log($"Actual playlist (selected): {playlist} \n{sb}");
             PlayNext();
         }
 
