@@ -63,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Logger.cs" />
+    <Compile Include="Playlist.cs" />
     <Compile Include="PlaylistPlayers\SecondaryPlaylistPlayer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -10,8 +10,8 @@ namespace DnDTool
 {
     class MainPlaylistPlayer : PlaylistPlayer
     {
-        public Dictionary<string, List<string>> afterCombatPlaylists = new Dictionary<string, List<string>>();
-        List<string> actualPlaylist;
+        public List<Playlist> afterCombatPlaylists = new List<Playlist>();
+        Playlist actualPlaylist;
         string encounterPath = Directory.GetCurrentDirectory() + @"\audio\main\encounter.mp3";
         public bool repeatP;
         public bool combatP;
@@ -66,20 +66,33 @@ namespace DnDTool
 
         private void PlayNext()
         {
-            // Encounter was played or playlist is empty and should repeat
-            if (actualPlaylist == null || (actualPlaylist.Count == 0 && repeatP))
+            List<Playlist> playlistType = combatP ? playlists : afterCombatPlaylists;
+            // Encounter was played or playlist is empty
+            if (actualPlaylist == null)
             {
-                actualPlaylist = RandomPlaylistFromPlaylists(combatP ? playlists : afterCombatPlaylists);
+                actualPlaylist = RandomPlaylistFromPlaylists(playlistType);
             }
-            if (actualPlaylist.Count != 0)
+            else if (actualPlaylist.TrackList.Count == 0)
             {
-                string actualTrack = actualPlaylist.First();
-                actualPlaylist.RemoveAt(0);
+                if (repeatP)
+                {
+                    actualPlaylist = ReloadActualPlaylist(actualPlaylist.Name, playlistType);
+                }
+                else
+                {
+                    actualPlaylist = RandomPlaylistFromPlaylists(playlistType);
+                }
+            }
+            if (actualPlaylist.TrackList.Count != 0)
+            {
+                string actualTrack = actualPlaylist.TrackList.First();
+                actualPlaylist.TrackList.RemoveAt(0);
                 Logger.Log($"Actual track (main): {string.Join("/", actualTrack.Split(Path.DirectorySeparatorChar).Reverse().Take(4).Reverse())}");
                 Play(actualTrack);
             }
             else
             {
+                // Potentional empty playlist
                 hideMediaButtons(null, null);
             }
         }
@@ -102,10 +115,11 @@ namespace DnDTool
         public void PlayCombatSelected(string playlist)
         {
             combatP = true;
-            actualPlaylist = playlists[playlist].OrderBy(x => rand.Next()).ToList();
-            StringBuilder sb = new StringBuilder();
-            actualPlaylist.ForEach(x => sb.Append(x + '\n'));
-            Logger.Log($"Actual playlist (selected): {playlist} \n{sb}");
+            actualPlaylist = playlists.Where(x => x.Name == playlist).First().Coppy();
+            actualPlaylist.TrackList = actualPlaylist.TrackList
+                                                            .OrderBy(x => rand.Next())
+                                                            .ToList();
+            this.LogActualPlaylist(actualPlaylist);
             PlayNext();
         }
 
@@ -119,10 +133,11 @@ namespace DnDTool
         public void PlayAfterCombatSelected(string playlist)
         {
             combatP = false;
-            actualPlaylist = afterCombatPlaylists[playlist].OrderBy(x => rand.Next()).ToList();
-            StringBuilder sb = new StringBuilder();
-            actualPlaylist.ForEach(x => sb.Append(x + '\n'));
-            Logger.Log($"Actual playlist (selected): {playlist} \n{sb}");
+            actualPlaylist = afterCombatPlaylists.Where(x => x.Name == playlist).First().Coppy(); 
+            actualPlaylist.TrackList = actualPlaylist.TrackList
+                                                        .OrderBy(x => rand.Next())
+                                                        .ToList();
+            this.LogActualPlaylist(actualPlaylist);
             PlayNext();
         }
 

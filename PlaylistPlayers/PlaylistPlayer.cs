@@ -12,11 +12,11 @@ namespace DnDTool
     abstract class PlaylistPlayer
     {
         internal MediaPlayer mediaPlayer = new MediaPlayer();
-        public Dictionary<string, List<string>> playlists = new Dictionary<string, List<string>>();
+        public List<Playlist> playlists = new List<Playlist>();
         protected Random rand = new Random();
         internal string audioDirectoryPath = Directory.GetCurrentDirectory() + @"\audio";
 
-        internal void FillPlaylists(Dictionary<string, List<string>> _playlists, string path) 
+        internal void FillPlaylists(List<Playlist> _playlists, string path) 
         {
             foreach (string directoryNameFull in Directory.GetDirectories(path))
             {
@@ -26,7 +26,7 @@ namespace DnDTool
                     listOfTracks.Add(fileNameFull);
                 }
 
-                _playlists.Add(directoryNameFull.Split('\\').Last(), listOfTracks);
+                _playlists.Add(new Playlist(directoryNameFull.Split('\\').Last(), listOfTracks));
             }
         }
 
@@ -40,23 +40,44 @@ namespace DnDTool
             mediaPlayer.Play();
         }
 
-        internal List<string> RandomPlaylistFromPlaylists(Dictionary<string, List<string>> _playlists)
+        internal Playlist ReloadActualPlaylist(string actualPlaylistName, List<Playlist> _playlists)
         {
-            // Just coppy of playlist and also random ordered
+            // Coppy actual plylist
+            var reloadedPlaylist = _playlists.Where(x => x.Name == actualPlaylistName).First().Coppy();
 
-            var pickedPlaylist = _playlists.ElementAt(rand.Next(0, _playlists.Count));
-            StringBuilder sb = new StringBuilder();
-            pickedPlaylist.Value.ForEach(x => sb.Append(x + '\n'));
-            Logger.Log($"Actual playlist (random): {pickedPlaylist.Key} \n{sb}");
-            
-            return pickedPlaylist.Value
-                                    .OrderBy(x => rand.Next())
-                                    .ToList();
+            this.LogActualPlaylist(reloadedPlaylist);
+
+            // ... and also random order
+            reloadedPlaylist.TrackList = reloadedPlaylist.TrackList
+                                                            .OrderBy(x => rand.Next())
+                                                            .ToList();
+            return reloadedPlaylist;
         }
 
-        internal string RandomTrackFromPlaylist(List<string> playlist)
+        internal Playlist RandomPlaylistFromPlaylists(List<Playlist> _playlists)
         {
-            return playlist[rand.Next(0, playlist.Count)];
+            // Just coppy of playlist...
+            var pickedPlaylist = _playlists.ElementAt(rand.Next(0, _playlists.Count)).Coppy();
+
+            this.LogActualPlaylist(pickedPlaylist);
+
+            // ... and also random order
+            pickedPlaylist.TrackList = pickedPlaylist.TrackList
+                                                        .OrderBy(x => rand.Next())
+                                                        .ToList();
+            return pickedPlaylist;
+        }
+
+        internal string RandomTrackFromPlaylist(Playlist playlist)
+        {
+            return playlist.TrackList[rand.Next(0, playlist.TrackList.Count)];
+        }
+
+        protected void LogActualPlaylist(Playlist playlist)
+        {
+            StringBuilder sb = new StringBuilder();
+            playlist.TrackList.ForEach(x => sb.Append(x + '\n'));
+            Logger.Log($"Actual playlist (random): {playlist.Name} \n{sb}");
         }
     }
 }

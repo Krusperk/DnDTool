@@ -49,9 +49,9 @@ namespace DnDTool
         {
             InitializeComponent();
             setBackground();
-            combatCmb.ItemsSource = mainPlaylistPlayer.playlists.Keys;
+            combatCmb.ItemsSource = mainPlaylistPlayer.playlists.Select(x => x.Name);
             combatCmb.DropDownClosed += (s, e) => { PlaySelected(s); };
-            afterCombatCmb.ItemsSource = mainPlaylistPlayer.afterCombatPlaylists.Keys;
+            afterCombatCmb.ItemsSource = mainPlaylistPlayer.afterCombatPlaylists.Select(x => x.Name);
             afterCombatCmb.DropDownClosed += (s, e) => { PlaySelected(s); };
             mainPlaylistPlayer.hideMediaButtons += stopBtn_Click;
             secondaryPlaylistPlayer.mediaPlayer.MediaEnded += (s, e) => { mainPlaylistPlayer.TurnUpVolume(s); };

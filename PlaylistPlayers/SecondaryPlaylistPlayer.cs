@@ -23,7 +23,7 @@ namespace DnDTool
 
         public void GeneratedButtonClicked(string buttonName)
         {
-            PlaySecond(RandomTrackFromPlaylist(playlists.Where(x => x.Key == buttonName).FirstOrDefault().Value));
+            PlaySecond(RandomTrackFromPlaylist(playlists.Where(x => x.Name == buttonName).FirstOrDefault()));
         }
 
         public void PlaySecond(string path = "")
